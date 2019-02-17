@@ -12,6 +12,6 @@ public interface YandexApi {
             "Content-Length: 17",
             "Content-Type: application/x-www-form-urlencoded"
     })
-    @GET("translate?lang=es-en&key=trnsl.1.1.20190215T125747Z.6991ebda66ad433c.2f491a5083d1913016f2d4bf2c766ed3a6ab8466")
-    Call<YandexTranslateResponse> translateText(@Query("text") String text);
+    @GET("translate")
+    Call<YandexTranslateResponse> translateText(@Query("key") String key, @Query("text") String text, @Query("lang") String lang);
 }

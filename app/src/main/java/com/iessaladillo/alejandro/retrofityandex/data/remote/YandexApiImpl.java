@@ -25,4 +25,8 @@ public class YandexApiImpl {
                 addConverterFactory(GsonConverterFactory.create()).build();
         return retrofit.create(YandexApi.class);
     }
+
+    public YandexApi getYANDEXAPI() {
+        return YANDEXAPI;
+    }
 }

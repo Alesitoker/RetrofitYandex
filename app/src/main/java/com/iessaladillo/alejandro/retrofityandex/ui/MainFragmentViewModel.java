@@ -17,7 +17,6 @@ public class MainFragmentViewModel extends ViewModel {
     private static final String TRANSLATE_TAG = MainFragmentViewModel.class.getSimpleName();
 
     private final MutableLiveData<String> translateTrigger = new MutableLiveData<>();
-    private final LiveData<Boolean> loading;
     private final LiveData<Resource<TranslateText>> translateText;
     private final MediatorLiveData<Event<String>> message = new MediatorLiveData<>();
     private final MediatorLiveData<String> translatedText = new MediatorLiveData<>();
@@ -31,14 +30,22 @@ public class MainFragmentViewModel extends ViewModel {
             return repository.translate(translateTrigger.getValue(), TRANSLATE_TAG);
         });
 
+        message.addSource(translateText, resource -> {
+            if (resource.hasError()) {
+                message.setValue(new Event<>(resource.getException().getMessage()));
+            }
+        });
+
+        translatedText.addSource(translateText, resource -> {
+            if (resource.hasSuccess()) {
+                translatedText.setValue(resource.getData().getText().get(0));
+            }
+        });
+
     }
 
     public void translate(String text) {
         translateTrigger.setValue(text);
-    }
-
-    public LiveData<Boolean> getLoading() {
-        return loading;
     }
 
     public MediatorLiveData<Event<String>> getMessage() {
